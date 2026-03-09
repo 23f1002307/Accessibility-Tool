@@ -1,30 +1,60 @@
 // background/service_worker.js
 
 /*
-This service worker listens for keyboard shortcut commands
-defined in manifest.json and forwards them to the active tab.
+Service Worker
 
-Commands handled:
-Ctrl + Alt + S → mark_start
-Ctrl + Alt + E → mark_end
-Ctrl + Alt + C → inspect_selection
+Responsibilities:
+1. Listen for keyboard shortcut commands
+2. Forward commands to the active tab
+3. Open the inspector page when requested
 */
 
+
+// ----------------------------------
+// Handle Keyboard Shortcuts
+// ----------------------------------
+
 chrome.commands.onCommand.addListener((command) => {
+
     console.log("Command received:", command);
 
-    // Get the currently active tab
+    // Find active tab
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+
         if (!tabs || tabs.length === 0) {
-            console.warn("No active tab found");
+            console.warn("No active tab found.");
             return;
         }
 
         const activeTabId = tabs[0].id;
 
-        // Send message to content script
+        // Send command to content script
         chrome.tabs.sendMessage(activeTabId, {
             action: command
         });
+
     });
+
+});
+
+
+// ----------------------------------
+// Handle Messages from Content Script
+// ----------------------------------
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+
+    if (!message || !message.action) return;
+
+    console.log("Service worker received message:", message.action);
+
+    // Open inspector page
+    if (message.action === "open_inspector_page") {
+
+        chrome.tabs.create({
+            url: chrome.runtime.getURL("inspector/inspector.html")
+        });
+
+    }
+
 });

@@ -1,20 +1,9 @@
 // content/content.js
 
-/*
-Main entry point for the content script.
-
-Responsibilities:
-- Receive commands from the background service worker
-- Trigger selection actions
-- Communicate with SelectionManager
-*/
-
 console.log("Accessibility Inspector content script loaded.");
 
-// Initialize selection manager
 const selectionManager = new SelectionManager();
 
-// Listen for messages from service worker
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     if (!message || !message.action) return;
@@ -42,9 +31,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 
 // -----------------------------
-// Handlers
+// START ANCHOR
 // -----------------------------
-
 function handleMarkStart() {
 
     const anchor = Anchor.createFromCurrentPosition();
@@ -60,6 +48,9 @@ function handleMarkStart() {
 }
 
 
+// -----------------------------
+// END ANCHOR
+// -----------------------------
 function handleMarkEnd() {
 
     const anchor = Anchor.createFromCurrentPosition();
@@ -81,6 +72,9 @@ function handleMarkEnd() {
 }
 
 
+// -----------------------------
+// INSPECT SELECTION
+// -----------------------------
 function handleInspect() {
 
     const selection = selectionManager.getSelection();
@@ -90,11 +84,30 @@ function handleInspect() {
         return;
     }
 
-    console.log("Inspecting selection:", selection);
+    const element = selection.start.element;
 
-    // Open inspector page
-    chrome.runtime.sendMessage({
-        action: "open_inspector",
-        selection: selection
+    const info = DomUtils.extractElementInfo(element);
+
+    const inspectionData = {
+        xpath: selection.start.xpath,
+        tag: info.tag,
+        text: info.text,
+        html: info.html,
+        attributes: info.attributes,
+        interactive: info.interactive
+    };
+
+    // Save data for inspector page
+    chrome.storage.local.set({
+        inspectionData: inspectionData
+    }, () => {
+
+        console.log("Inspection data saved.");
+
+        // Open inspector page
+        chrome.runtime.sendMessage({
+            action: "open_inspector_page"
+        });
+
     });
 }
