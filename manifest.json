@@ -1,8 +1,7 @@
 {
   "manifest_version": 3,
-
   "name": "Accessibility Inspector Tool",
-  "description": "A semantic accessibility inspection tool for selecting webpage regions and extracting accessibility-related information.",
+  "description": "A semantic accessibility inspection tool for selecting webpage regions and extracting accessibility information.",
   "version": "1.0.0",
 
   "icons": {
@@ -37,7 +36,7 @@
       "js": [
         "content/anchor.js",
         "content/selectionManager.js",
-        "content/domUtils.js",
+        "utils/domUtils.js",
         "content/overlay.js",
         "content/content.js"
       ],
@@ -54,12 +53,14 @@
       },
       "description": "Mark start anchor"
     },
+
     "mark_end": {
       "suggested_key": {
         "default": "Ctrl+Alt+E"
       },
       "description": "Mark end anchor"
     },
+
     "inspect_selection": {
       "suggested_key": {
         "default": "Ctrl+Alt+C"
