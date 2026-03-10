@@ -4,17 +4,12 @@
   "description": "A semantic accessibility inspection tool for selecting webpage regions and extracting accessibility information.",
   "version": "1.0.0",
 
-  "icons": {
-    "16": "assets/icon16.png",
-    "48": "assets/icon48.png",
-    "128": "assets/icon128.png"
-  },
-
   "permissions": [
     "activeTab",
     "scripting",
     "storage",
-    "tabs"
+    "tabs",
+    "downloads"
   ],
 
   "host_permissions": [
@@ -49,23 +44,30 @@
   "commands": {
     "mark_start": {
       "suggested_key": {
-        "default": "Ctrl+Alt+S"
+        "default": "Ctrl+Shift+S"
       },
       "description": "Mark start anchor"
     },
 
     "mark_end": {
       "suggested_key": {
-        "default": "Ctrl+Alt+E"
+        "default": "Ctrl+Shift+E"
       },
       "description": "Mark end anchor"
     },
 
     "inspect_selection": {
       "suggested_key": {
-        "default": "Ctrl+Alt+C"
+        "default": "Ctrl+Shift+Y"
       },
       "description": "Open inspector"
+    },
+
+    "take_screenshot": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X"
+      },
+      "description": "Capture screenshot of selected region"
     }
   }
 }
